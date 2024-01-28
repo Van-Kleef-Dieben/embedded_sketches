@@ -140,7 +140,8 @@
       noStroke()
 
       textFont('Courier New');
-      textSize(10);
+      textAlign(CENTER);
+      textSize(12);
       fill(200)
 
       let ww = w / Object.keys(ms).length
@@ -155,7 +156,8 @@
         fill(0)
         rect(ww* 0.05 + i * (ww), 20 + ms[key].y0 * 300, iww, (ms[key].y1- ms[key].y0) * 300)
 
-        text( key, ww* 0.05 + i * ww, 350)
+        fill(200)
+        text( key, ww* 0.05 + 0.45 * ww + i * ww, 350)
 
         i++
       }
