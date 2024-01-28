@@ -4,73 +4,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
   <title>Clock</title>
   <style type="text/css">
-    canvas {
-      padding: 30px;
-    }
 
     body {
-      margin: 0;
+      margin: 20px;
       display: flex;
-      place-items: center;
-      min-width: 320px;
-      min-height: 100vh;
-      flex-direction: column;
+      align-content : center;
+      justify-content: center;
     }
+
 
     h1 {
       font-size: 3.2em;
       line-height: 1.1;
     }
 
-    button {
-      border-radius: 8px;
-      border: 1px solid transparent;
-      padding: 0.6em 1.2em;
-      font-size: 1em;
-      font-weight: 500;
-      font-family: inherit;
-      background-color: #1a1a1a;
-      cursor: pointer;
-      transition: border-color 0.25s;
+    #root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    button:hover {
-      border-color: #646cff;
+    #root * {
+      margin: 5px;
     }
 
-    button:focus,
-    button:focus-visible {
-      outline: 4px auto -webkit-focus-ring-color;
+    pre {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
     }
+
   </style>
 </head>
 
 <body>
-  <canvas id="canvas" width="1000" height="500" style="width: 1000px; height: 500px;"></canvas>
-  <div id="root">
-    <input type="date" name="date" id="date">
-    <input type="time" name="time" id="time">
+  <div>
+    <pre>     
+      _  ___      ______         _      _    
+      | |/ / |    |  ____|       | |    | |   
+      | ' /| |    | |__       ___| | ___| | __
+      |  < | |    |  __|     / __| |/ __| |/ /
+      | . \| |____| |       | (__| | (__|   < 
+      |_|\_\______|_|        \___|_|\___|_|\_\
+                                              
+                                              
+    </pre>
+    <canvas id="canvas"></canvas>
+    <div id="root">
+      <input type="date" name="date" id="date">
+      <input type="time" name="time" id="time">
+    </div>
   </div>
-  <script type="module" src="/src/main.jsx?t=1706440827847"></script>
   <script>
 
-    // let yd = 230;
-    // let m = 3
-    // let wd = 3;
-    // let h = 15
-    // let mm = 1;
-    // let s = 3;
+    let w;
 
     let dateTime = new Date()
+
+   
 
     const date = document.getElementById("date");
     date.value = dateTime.toISOString().slice(0,10)
     date.addEventListener("change", (e) => { 
       const value = new Date(e.target.value)
-      console.log(value)
       let [y, m, d] = value.toISOString().slice(0,10).split("-")
       dateTime.setFullYear(y)
       dateTime.setMonth(m - 1)
@@ -89,6 +89,13 @@
       dateTime.setMinutes(mm)
       
     })
+
+    setInterval(() => {
+      dateTime = new Date(dateTime.getTime() + 1000);
+      date.value = dateTime.toISOString().slice(0,10)
+      time.value = dateTime.getHours() + ":" + dateTime.getMinutes()
+
+    }, 1000)
 
     function getDayOfYear(date) 
     {
@@ -120,46 +127,55 @@
 
       clear()
 
-      let w = 800 / 3
-
-      // noStroke()
-
-      const ms = [
-        calculate((getDayOfYear(dateTime) + 10) % 365, 365),
-        calculate(getDayOfYear(dateTime), 365),
-        calculate(dateTime.getMonth(), 12),
-        calculate([1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(dateTime.getDay())), 7),
-        calculate(dateTime.getHours(), 24),
-        calculate(dateTime.getMinutes(), 60),
-        calculate(new Date().getSeconds(), 60)
-      ]
+      const ms = {
+        "solstice": calculate((getDayOfYear(dateTime) + 10) % 365, 365),
+        "%j" : calculate(getDayOfYear(dateTime), 365),
+        "%m" : calculate(dateTime.getMonth(), 12),
+        "%u" : calculate([1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(dateTime.getDay())), 7),
+        "%H" : calculate(dateTime.getHours(), 24),
+        "%M" : calculate(dateTime.getMinutes(), 60),
+        "%S" : calculate(dateTime.getSeconds(), 60)
+      }
 
       noStroke()
 
-      for (let i = 0; i < ms.length; i++)
+      textFont('Courier New');
+      textSize(10);
+      fill(200)
+
+      let ww = w / Object.keys(ms).length
+      let iww = ww * 0.9
+      let i = 0
+
+      for (let key in ms) 
       {
         fill (255)
         // console.log((ms[i].y1- ms[i].y0))
-        rect(i * (100), 20, 80, 300)
+        rect(ww* 0.05 + i * (ww), 20, iww, 300)
         fill(0)
-        rect(i * (100), 20 + ms[i].y0 * 300, 80, (ms[i].y1- ms[i].y0) * 300)
+        rect(ww* 0.05 + i * (ww), 20 + ms[key].y0 * 300, iww, (ms[key].y1- ms[key].y0) * 300)
+
+        text( key, ww* 0.05 + i * ww, 350)
+
+        i++
       }
 
-      textFont('Courier New');
-      textSize(12);
-      fill(200)
-      text( "solstice", 10, 350)
-      text( "%j", 130, 350)
-      text( "%m", 230, 350)
-      text( "%u", 330, 350)
-      text( "%H", 430, 350)
-      text( "%M", 530, 350)
-      text( "%S", 630, 350)
+
+      // text( "solstice", 10, 350)
+      
+      // text( "%m", 230, 350)
+      // text( "%u", 330, 350)
+      // text( "%H", 430, 350)
+      // text( "%M", 530, 350)
+      // text( "%S", 630, 350)
 
     }
 
     function setup() {
-      createCanvas(700, 400, document.getElementById("canvas"))
+
+      w = document.documentElement.clientWidth 
+      w = w > 800 ? 800 : w
+      createCanvas(w, 400, document.getElementById("canvas"))
       background(255)
 
     }
