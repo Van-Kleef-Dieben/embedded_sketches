@@ -72,8 +72,9 @@
     let w;
 
     let dark = false
+    let lastDate = Date.now()
 
-    let dateTime = new Date()
+    // let dateTime = new Date()
 
     document.getElementById("sun").addEventListener("change", () => {
         dark = !dark
@@ -86,34 +87,47 @@
     })
 
     const date = document.getElementById("date");
-    date.value = dateTime.toISOString().slice(0,10)
+    date.value = new Date(lastDate).toISOString().slice(0,10)
     date.addEventListener("change", (e) => { 
       const value = new Date(e.target.value)
       let [y, m, d] = value.toISOString().slice(0,10).split("-")
-      dateTime.setFullYear(y)
-      dateTime.setMonth(m - 1)
-      dateTime.setDate(d)
+      // new Date(lastDate).setFullYear(y)
+      // new Date(lastDate).setMonth(m - 1)
+      // new Date(lastDate).setDate(d)
+      console.log(lastDate - value)
+      lastDate += (lastDate - value)
     })
 
     const time = document.getElementById("time");
-    time.value = dateTime.getHours() + ":" + dateTime.getMinutes()
+    time.value = new Date(lastDate).getHours() + ":" + new Date(lastDate).getMinutes()
     time.addEventListener("change", (e) => { 
       let value = e.target.value;
       [h, mm] = value.split(":");
       h = parseInt(h)
       mm = parseInt(mm)
 
-      dateTime.setHours(h)
-      dateTime.setMinutes(mm)
+      // dateTime.setHours(h)
+      // dateTime.setMinutes(mm)
+
+      lastDate += (h - new Date(lastDate).getHours()) * 60 * 60 * 1000
+      lastDate += (mm - new Date(lastDate).getMinutes()) * 60 * 1000
       
     })
 
-    setInterval(() => {
-      dateTime = new Date(dateTime.getTime() + 1000);
-      date.value = dateTime.toISOString().slice(0,10)
-      time.value = dateTime.getHours() + ":" + dateTime.getMinutes()
+    
 
-    }, 1000)
+    setInterval(() => {
+      let p = Date.now()
+      let d = p - lastDate
+      //lastDate = Date.
+
+      // console.log(d)
+
+      // dateTime = new Date(dateTime.getTime() + d);
+      //date.value = dateTime.toISOString().slice(0,10)
+      //time.value = dateTime.getHours() + ":" + dateTime.getMinutes()
+
+    }, 10)
 
     function getDayOfYear(date) 
     {
@@ -141,21 +155,32 @@
       return  {y0: y0, y1: y1}
     }
 
+    lastDraw = Date.now()
+
     function draw() {
 
       clear()
 
+      lastDate += (Date.now() - lastDraw)
+      lastDraw = Date.now()
+
+      let fd = (lastDate / (60 * 60000) % 24) / 24
+      let fm = new Date(lastDate).getDate() /  new Date(new Date(lastDate).getFullYear(), new Date(lastDate).getMonth(), 0).getDate();
+      // console.log(fm)
+
       const ms = {
-        "solstice": calculate((getDayOfYear(dateTime) + 10) % 365, 365),
-        "%j" : calculate(getDayOfYear(dateTime), 365),
-        "%m" : calculate(dateTime.getMonth(), 12),
-        "%u" : calculate([1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(dateTime.getDay())), 7),
-        "%H" : calculate(dateTime.getHours(), 24),
-        "%M" : calculate(dateTime.getMinutes(), 60),
-        "%S" : calculate(dateTime.getSeconds(), 60)
+        "solstice": calculate((getDayOfYear(new Date(lastDate)) + 10) % 365 + fd, 365),
+        "%j" : calculate(getDayOfYear(new Date(lastDate)) + fd, 365),
+        "%m" : calculate(new Date(lastDate).getMonth() + fm, 12),
+        "%u" : calculate([1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(new Date(lastDate).getDay())) + fd, 7),
+        "%H" : calculate(lastDate / (60 * 60000) % 24, 24),
+        "%M" : calculate(lastDate / (60000) % 60, 60),
+        "%S" : calculate(lastDate % 60000, 60000)
       }
 
       noStroke()
+
+      //console.log((lastDate / (60 * 60000) % 24) / 24)
 
       textFont('Courier New');
       textAlign(CENTER);
