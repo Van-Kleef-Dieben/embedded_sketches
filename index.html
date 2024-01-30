@@ -193,11 +193,8 @@
 
       for (let key in ms) 
       {
-        fill (dark ? 0 : 255)
-        // console.log((ms[i].y1- ms[i].y0))
-        rect(ww* 0.05 + i * (ww), 20, iww, 300)
         fill(dark ? 255 : 0)
-        rect(ww* 0.05 + i * (ww), 20 + ms[key].y0 * 300, iww, (ms[key].y1- ms[key].y0) * 300)
+        rect(ww* 0.05 + i * (ww), 320 - ms[key].y1 * 300, iww, (ms[key].y1 - ms[key].y0) * 300)
 
         fill(dark ? 55: 200)
         text( key, ww* 0.05 + 0.45 * ww + i * ww, 350)
