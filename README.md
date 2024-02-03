@@ -6,6 +6,7 @@ fi
 
 #### /etc/X11/xorg.conf.d/10-monitor.conf
 
+```
 Section "ServerLayout"
         Identifier "Layout"
         Screen "Screen0" 0 0
@@ -53,3 +54,4 @@ Section "Screen"
         Device "Device1"
         Monitor "Monitor1"
 EndSection
+```
