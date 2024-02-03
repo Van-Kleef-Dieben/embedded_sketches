@@ -1,8 +1,11 @@
 #### bash_profile
 
-if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-  exec startx
+```
+if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
+        . startx
+        logout
 fi
+```
 
 #### /etc/X11/xorg.conf.d/10-monitor.conf
 
