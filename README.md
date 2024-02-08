@@ -92,6 +92,12 @@ nano /etc/systemd/system/getty@tty1.service.d/override.conf
     ExecStart=
     ExecStart=-/sbin/agetty --autologin YourUsername --noclear %I 38400 linux
 ```
+Enable:
+
+```
+ systemctl -f enable multi-user.target
+```
+
 ##### create or modify .profile script in your /home/YopurUsername to start X on login
 ```
 nano .profile
