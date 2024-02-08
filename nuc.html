@@ -1,0 +1,56 @@
+<html>
+
+        <head>
+                <script src="./p5.min.js"></script>
+                <style>
+                        body, html {
+                                margin: 0;
+                                overflow: hidden;
+                                background: white;
+                        }
+                </style>
+        </head>
+        <body>
+                <script>
+
+                        let lastDraw = Date.now()
+                        let lastDate = Date.now()
+
+                        function calculate(value, max)
+                        {
+                        if (value < max / 2)
+                        {
+                                y0 = 0;
+                                y1 = value / (max / 2);
+                        }
+                        else
+                        {
+                                y0 = (value - max / 2) / (max / 2);
+                                y1 = 1;
+                        }
+
+                        return  {y0: y0, y1: y1}
+                        }
+
+                        function draw()
+                        {
+                                lastDate += (Date.now() - lastDraw)
+                        lastDraw = Date.now()
+
+                                // 60 minutes
+                                let p = calculate(lastDate / 60000 % 60, 60)
+
+                                background(0)
+                                fill(255)
+                                rect(0, displayHeight - p.y1 * displayHeight, displayWidth, (p.y1 - p.y0) * displayHeight)
+                        }
+                        function setup()
+                        {
+                                frameRate(30);
+                                createCanvas(displayWidth, displayHeight);
+
+                        }
+                </script>
+
+</body>
+</html>
