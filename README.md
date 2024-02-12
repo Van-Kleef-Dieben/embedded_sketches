@@ -118,3 +118,22 @@ nano .xinitrc
     chromium https://www.bing.com --window-size=1920,1080 --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 reboot
 ```
+
+
+#### don't wait for network
+
+https://askubuntu.com/questions/972215/a-start-job-is-running-for-wait-for-network-to-be-configured-ubuntu-server-17-1
+
+```
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    eno1:
+      dhcp4: true
+      optional: true
+  version: 2
+```
+
+```
+sudo netplan apply
+```
