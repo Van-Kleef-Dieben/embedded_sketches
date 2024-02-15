@@ -43,7 +43,7 @@
                                 // dag van de week
                                 
                                 /*
-                                let fd = (lastDate / (60 * 60000) % 24) / 24
+                                let fd = (lastDate / (60 * 60000) % 24) / 24 - ( new Date(lastDate).getTimezoneOffset() / (24 * 60))
                                 let d = [1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(new Date(lastDate).getDay())) + fd
                                 let p = calculate(d, 7)
                                 */
