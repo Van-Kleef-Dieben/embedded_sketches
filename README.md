@@ -112,3 +112,9 @@ network:
 ```
 sudo netplan apply
 ```
+
+#### time control
+
+```
+timedatectl set-timezone Europe/Amsterdam
+```
