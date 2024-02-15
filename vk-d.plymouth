@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=VK-D
+Description=Fancy Description Here
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/vk-d
+ScriptFile=/usr/share/plymouth/themes/vk-d/vk-d.script
