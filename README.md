@@ -15,8 +15,8 @@ xset s noblank
 
 unclutter -idle 0.001 -root &
 
-DISPLAY=:0.0 /usr/bin/chromium-browser file:///home/wubmans/test2.html --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic --user-data-dir="/home/wubmans/cb1" &
-DISPLAY=:0.1 /usr/bin/chromium-browser file:///home/wubmans/test1.html --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic --user-data-dir="/home/wubmans/cb0"
+DISPLAY=:0.0 /usr/bin/chromium-browser file:///home/wubmans/test2.html --kiosk --user-data-dir="/home/wubmans/cb1" &
+DISPLAY=:0.1 /usr/bin/chromium-browser file:///home/wubmans/test1.html --kiosk --user-data-dir="/home/wubmans/cb0"
 ```
 
 #### .bash_profile / .profile
