@@ -35,10 +35,11 @@
                         function draw()
                         {
                                 lastDate += (Date.now() - lastDraw)
-                                lastDraw = Date.now()
+      			        lastDraw = Date.now()
+                                lastDateJS = new Date(lastDate)
 
-                                // uren van de dag
-                                let p = calculate((lastDate / (60000 * 60)) % 24, 24)
+				// 24 hours
+        		        let p = calculate(((lastDate / (60000 * 60)) - lastDateJS.getTimezoneOffset() / 60) % 24, 24)
 
                                 // dag van de week
                                 
@@ -61,7 +62,7 @@
                         }
                         function setup()
                         {
-                                frameRate(30);
+                                frameRate(5);
                                 createCanvas(displayWidth, displayHeight);
 
                         }
