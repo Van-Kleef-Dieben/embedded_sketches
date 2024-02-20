@@ -156,3 +156,10 @@ sudo netplan apply
 ```
 timedatectl set-timezone Europe/Amsterdam
 ```
+
+#### Plymouth
+
+```
+sudo update-alternatives --config default.plymouth
+sudo update-initramfs -u
+```
