@@ -160,6 +160,6 @@ timedatectl set-timezone Europe/Amsterdam
 #### Plymouth
 
 ```
-sudo update-alternatives --config default.plymouth
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/vk-d/vk-d.plymouth 100
 sudo update-initramfs -u
 ```
