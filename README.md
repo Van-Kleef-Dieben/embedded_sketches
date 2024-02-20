@@ -179,3 +179,17 @@ Edit the file /etc/initramfs-tools/conf.d/splash and add this line:
 
 FRAMEBUFFER=y
 
+#### Remove ubuntu cloud
+
+```
+sudo touch /etc/cloud/cloud-init.disabled
+```
+
+Uninstall the package and delete the folders
+
+```
+sudo dpkg-reconfigure cloud-init
+sudo apt-get purge cloud-init
+sudo rm -rf /etc/cloud/ && sudo rm -rf /var/lib/cloud/
+```
+
