@@ -155,6 +155,8 @@ sudo netplan apply
 
 ```
 timedatectl set-timezone Europe/Amsterdam
+sudo systemctl stop systemd-timesyncd
+sudo timedatectl set-time "2024-02-20 23:55:00"
 ```
 
 #### Plymouth
