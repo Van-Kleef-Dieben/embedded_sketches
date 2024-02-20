@@ -137,7 +137,12 @@ Enable:
 
 https://askubuntu.com/questions/972215/a-start-job-is-running-for-wait-for-network-to-be-configured-ubuntu-server-17-1
 
+
+
 ```
+
+/etc/netplan/01-netcfg.yaml
+
 # This is the network config written by 'subiquity'
 network:
   ethernets:
