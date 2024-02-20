@@ -167,3 +167,10 @@ sudo ln -s  /usr/share/plymouth/themes/vk-d/vk-d.plymouth /etc/alternatives/defa
 sudo ln -s  /etc/alternatives/default.plymouth /usr/share/plymouth/themes/default.plymouth
 sudo update-initramfs -u
 ```
+
+#### Frame Buffer in initramfs-tools
+
+Edit the file /etc/initramfs-tools/conf.d/splash and add this line:
+
+FRAMEBUFFER=y
+
