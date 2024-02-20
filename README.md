@@ -133,6 +133,12 @@ Enable:
  systemctl -f enable multi-user.target
 ```
 
+Remove login message:
+
+```
+touch ~/.hushlogin
+```
+
 #### don't wait for network
 
 https://askubuntu.com/questions/972215/a-start-job-is-running-for-wait-for-network-to-be-configured-ubuntu-server-17-1
