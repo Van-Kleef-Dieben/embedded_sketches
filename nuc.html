@@ -1,72 +1,111 @@
+<!DOCTYPE html>
 <html>
 
-        <head>
-                <script src="./p5.min.js"></script>
-                <style>
-                        body, html {
-                                margin: 0;
-                                overflow: hidden;
-                                background: white;
-                        }
-                </style>
-        </head>
-        <body>
-                <script>
+	<head>
+		<script src="./p5.min.js"></script>
+		<style>
+			body, html {
+				margin: 0;
+				overflow: hidden;
+				background: white;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
 
-                        let lastDraw = Date.now()
-                        let lastDate = Date.now()
+            let lastDate = Date.now();
+            let lastDraw = Date.now();
+            let lastDateJS;
 
-                        function calculate(value, max)
-                        {
-                        if (value < max / 2)
-                        {
-                                y0 = 0;
-                                y1 = value / (max / 2);
-                        }
-                        else
-                        {
-                                y0 = (value - max / 2) / (max / 2);
-                                y1 = 1;
-                        }
+            let debugTime = null;
+            let debugTimeout = 60000;
 
-                        return  {y0: y0, y1: y1}
-                        }
+            let period = (new URLSearchParams(window.location.search)).get("period")
 
-                        function draw()
-                        {
-                                lastDate += (Date.now() - lastDraw)
-      			        lastDraw = Date.now()
-                                lastDateJS = new Date(lastDate)
+            function calculate(value, max)
+			{
+                if (value < max / 2)
+                {
+                    y0 = 0;
+                    y1 = value / (max / 2);
+                }
+                else
+                {
+                    y0 = (value - max / 2) / (max / 2);
+                    y1 = 1;
+                }
 
-				// 24 hours
-        		        let p = calculate(((lastDate / (60000 * 60)) - lastDateJS.getTimezoneOffset() / 60) % 24, 24)
+                return  {y0: y0, y1: y1}
+			}
 
-                                // dag van de week
-                                
-                                /*
-				let fd = (lastDate / (60 * 60000) - lastDateJS.getTimezoneOffset() / 60 ) % 24 / 24;
-                                let d = [1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(new Date(lastDate).getDay())) + fd
-                                let p = calculate(d, 7)
-                                */
+            function keyPressed() {
+                debugTime = Date.now() + debugTimeout;
+            }
 
-                                background(0)
-                                fill(255)
-                                rect(0, displayHeight - p.y1 * displayHeight, displayWidth, (p.y1 - p.y0) * displayHeight)
-        
-                                // debug
-                                // fill("red")
-                                // textSize(16);
-                                // text(new Date(), 10, 20)
+			function draw() {
 
-                                
-                        }
-                        function setup()
-                        {
-                                frameRate(5);
-                                createCanvas(displayWidth, displayHeight);
+                clear();
+                background(0);
+                fill(255);
 
-                        }
-                </script>
+				lastDate += (Date.now() - lastDraw)
+      			lastDraw = Date.now()
+                lastDateJS = new Date(lastDate)
+
+                let v;
+                let max;
+
+                switch(period) {
+                    case "minutes": 
+                        v = lastDate / (60000) % 60;
+                        max = 60;
+                        break;
+                    case "hours": 
+                        v = ((lastDate / (60000 * 60)) - lastDateJS.getTimezoneOffset() / 60) % 24
+                        max = 24;
+                        
+                        break;
+                    case "dow":
+                        let fd = (lastDate / (60 * 60000) - lastDateJS.getTimezoneOffset() / 60 ) % 24 / 24; 
+                        v = [1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(lastDateJS.getDay())) + fd
+                        max = 7;
+                        break;
+                    
+                }
+
+                let p = calculate(v, max);
+                console.log(p)
+
+				rect(0, displayHeight - p.y1 * displayHeight, displayWidth, (p.y1 - p.y0) * displayHeight)
+
+                if (debugTime !== null) {
+                    if (debugTime < Date.now()) {
+                        debugTime = null;
+                    }
+
+                    fill("blue")
+                    
+                    text("Van Kleef - Dieben", 10, 10)
+                    text(period, 10, 30)
+                    text(`[${v.toFixed(3)} of ${max}] => ${p.y0.toFixed(3)}, ${p.y1.toFixed(3)}`, 10, 50)
+                    text(new Date(), 10, 70)
+                }
+			}
+
+            function setup()
+			{
+				frameRate(5);
+				createCanvas(displayWidth, displayHeight);
+                //createCanvas(400, 400)
+                
+				
+			}
+		</script>
 
 </body>
+
+
+
 </html>
+
