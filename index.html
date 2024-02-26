@@ -2,227 +2,209 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
-  <title>Clock</title>
-  <style type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+    <title>Clock</title>
+    <style type="text/css">
+        body {
+            margin: 20px;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
 
-    body {
-      margin: 20px;
-      display: flex;
-      align-content : center;
-      justify-content: center;
-      transition: 0.5s all;
-    }
+        body.dark {
+            background: #000;
+            color: white;
+        }
 
-    body.dark {
-      background: #000;
-      color: white;
-    }
+        canvas {
+            margin-top: 80px;
+        }
 
+        h1 {
+            font-size: 3.2em;
+            line-height: 1.1;
+        }
 
+        #root {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    h1 {
-      font-size: 3.2em;
-      line-height: 1.1;
-    }
+        #root * {
+            margin: 5px;
+        }
 
-    #root {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        pre {
+            text-align: center;
+            font-size: 14px;
+        }
 
-    #root * {
-      margin: 5px;
-    }
+        img#logo {
+            display: block;
+            margin: 40px auto;
+            max-width: 40px;
+        }
 
-    pre {
-      text-align: center;
-      font-size: 14px;
-    }
-
-  </style>
+        #controls {
+            display: none;
+            margin-top: 50px;
+            border: 1px solid #464646;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+    </style>
 </head>
 
-<body id="body">
-  <div>
-    <pre>     
-      _  ___      ______         _      _    
-      | |/ / |    |  ____|       | |    | |   
-      | ' /| |    | |__       ___| | ___| | __
-      |  < | |    |  __|     / __| |/ __| |/ /
-      | . \| |____| |       | (__| | (__|   < 
-      |_|\_\______|_|        \___|_|\___|_|\_\
-                                              
-                                              
-    </pre>
-    <canvas id="canvas"></canvas>
-    <div id="root">
-      <input type="radio" name="theme" checked="checked" id="sun"/> ☀️
-      <input type="radio" name="theme" id="moon"/> 🌙
-
-      <input type="date" name="date" id="date">
-      <input type="time" name="time" id="time">
+<body id="body" class="dark">
+    <div>   
+        <img src="logo.png" id="logo" alt="" srcset="">
+        <canvas id="canvas"></canvas>
+        <div id="controls">
+            <input type="date" name="date" id="date">
+            <input type="time" name="time" id="time">
+        </div>
     </div>
-  </div>
-  <script>
+    <script>
+        
+        let lastDate = Date.now();
+        let lastDraw = Date.now();
+        let lastDateJS;
 
-    let w;
+        let debugTime = null;
+        let debugTimeout = 3000;
 
-    let dark = false
-    let lastDate = Date.now()
+        function setupDOM() {
 
-    // let dateTime = new Date()
+            const date = document.getElementById("date");
+            date.value = new Date(lastDate).toISOString().slice(0, 10)
+            date.addEventListener("change", (e) => {
+                const newDate = new Date(e.target.value)
+                const currentDate = new Date(lastDate)
 
-    document.getElementById("sun").addEventListener("change", () => {
-        dark = !dark
-        document.getElementById("body").classList.toggle("dark")
-    })
+                newDate.setHours(currentDate.getHours())
+                newDate.setMinutes(currentDate.getMinutes())
+                
+                console.log(newDate)
+                console.log(lastDate)
+                lastDate = newDate.getTime()
+            })
 
-    document.getElementById("moon").addEventListener("change", () => {
-        dark = !dark
-        document.getElementById("body").classList.toggle("dark")
-    })
+            const time = document.getElementById("time");
+            time.value = new Date(lastDate).getHours() + ":" + new Date(lastDate).getMinutes()
+            time.addEventListener("change", (e) => {
+                let value = e.target.value;
+                [h, mm] = value.split(":");
+                h = parseInt(h)
+                mm = parseInt(mm)
+                lastDate += (h - new Date(lastDate).getHours()) * 60 * 60 * 1000
+                lastDate += (mm - new Date(lastDate).getMinutes()) * 60 * 1000
 
-    const date = document.getElementById("date");
-    date.value = new Date(lastDate).toISOString().slice(0,10)
-    date.addEventListener("change", (e) => { 
-      const value = new Date(e.target.value)
-      let [y, m, d] = value.toISOString().slice(0,10).split("-")
-      // new Date(lastDate).setFullYear(y)
-      // new Date(lastDate).setMonth(m - 1)
-      // new Date(lastDate).setDate(d)
-      console.log(lastDate - value)
-      lastDate += (lastDate - value)
-    })
+            })
+        }
 
-    const time = document.getElementById("time");
-    time.value = new Date(lastDate).getHours() + ":" + new Date(lastDate).getMinutes()
-    time.addEventListener("change", (e) => { 
-      let value = e.target.value;
-      [h, mm] = value.split(":");
-      h = parseInt(h)
-      mm = parseInt(mm)
+        function calculate(value, max) {
+            if (value < max / 2) {
+                y0 = 0;
+                y1 = value / (max / 2);
+            }
+            else {
+                y0 = (value - max / 2) / (max / 2);
+                y1 = 1;
+            }
 
-      // dateTime.setHours(h)
-      // dateTime.setMinutes(mm)
-
-      lastDate += (h - new Date(lastDate).getHours()) * 60 * 60 * 1000
-      lastDate += (mm - new Date(lastDate).getMinutes()) * 60 * 1000
-      
-    })
-
-    
-
-    setInterval(() => {
-      let p = Date.now()
-      let d = p - lastDate
-      //lastDate = Date.
-
-      // console.log(d)
-
-      // dateTime = new Date(dateTime.getTime() + d);
-      //date.value = dateTime.toISOString().slice(0,10)
-      //time.value = dateTime.getHours() + ":" + dateTime.getMinutes()
-
-    }, 10)
-
-    function getDayOfYear(date) 
-    {
-      
-      var start = new Date(date.getFullYear(), 0, 0);
-      var diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000);
-      var oneDay = 1000 * 60 * 60 * 24;
-      var day = Math.floor(diff / oneDay);
-      return day;
-    }
-
-    function calculate(value, max)
-    {
-      if (value < max / 2)
-      {
-        y0 = 0;
-        y1 = value / (max / 2);
-      }
-      else
-      {
-        y0 = (value - max / 2) / (max / 2);
-        y1 = 1;
-      }
-
-      return  {y0: y0, y1: y1}
-    }
-
-    lastDraw = Date.now()
-
-    function draw() {
-
-      clear()
-
-      lastDate += (Date.now() - lastDraw)
-      lastDraw = Date.now()
-
-      let fd = (lastDate / (60 * 60000) % 24) / 24
-      let fm = new Date(lastDate).getDate() /  new Date(new Date(lastDate).getFullYear(), new Date(lastDate).getMonth(), 0).getDate();
-      // console.log(fm)
-
-      const ms = {
-        "solstice": calculate((getDayOfYear(new Date(lastDate)) + 10) % 365 + fd, 365),
-        "%j" : calculate(getDayOfYear(new Date(lastDate)) + fd, 365),
-        "%m" : calculate(new Date(lastDate).getMonth() + fm, 12),
-        "%u" : calculate([1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(new Date(lastDate).getDay())) + fd, 7),
-        "%H" : calculate(lastDate / (60 * 60000) % 24, 24),
-        "%M" : calculate(lastDate / (60000) % 60, 60),
-        "%S" : calculate(lastDate % 60000, 60000)
-      }
-
-      noStroke()
-
-      //console.log((lastDate / (60 * 60000) % 24) / 24)
-
-      textFont('Courier New');
-      textAlign(CENTER);
-      textSize(12);
-      fill(200)
-
-      let ww = w / Object.keys(ms).length
-      let iww = ww * 0.9
-      let i = 0
-
-      for (let key in ms) 
-      {
-        fill(dark ? 255 : 0)
-        rect(ww* 0.05 + i * (ww), 320 - ms[key].y1 * 300, iww, (ms[key].y1 - ms[key].y0) * 300)
-
-        fill(dark ? 55: 200)
-        text( key, ww* 0.05 + 0.45 * ww + i * ww, 350)
-
-        i++
-      }
+            return { y0: y0, y1: y1 }
+        }
 
 
-      // text( "solstice", 10, 350)
-      
-      // text( "%m", 230, 350)
-      // text( "%u", 330, 350)
-      // text( "%H", 430, 350)
-      // text( "%M", 530, 350)
-      // text( "%S", 630, 350)
 
-    }
 
-    function setup() {
+        function keyPressed() {
+            debugTime = Date.now() + debugTimeout;
+        }
 
-      w = document.documentElement.clientWidth 
-      w = w > 800 ? 800 : w
-      createCanvas(w, 400, document.getElementById("canvas"))
-      background(255)
 
-    }
-  </script>
+        function draw() {
+
+            clear();
+            noStroke();
+
+
+            if (debugTime !== null) {
+                document.getElementById("controls").style.display = 'block';
+                if (debugTime < Date.now()) {
+                    document.getElementById("controls").style.display = 'none';
+                    debugTime = null;
+                }
+            }
+
+            background(debugTime ? 128: 0);
+
+            fill(255);
+
+            lastDate += (Date.now() - lastDraw)
+            lastDraw = Date.now()
+            lastDateJS = new Date(lastDate)
+
+            let v;
+            let max;
+
+            ["dow", "hours", "minutes"].forEach((period, i) => {
+
+                switch (period) {
+                    case "minutes":
+                        v = lastDate / (60000) % 60;
+                        max = 60;
+                        break;
+                    case "hours":
+                        v = ((lastDate / (60000 * 60)) - lastDateJS.getTimezoneOffset() / 60) % 24
+                        max = 24;
+
+                        break;
+                    case "dow":
+                        let fd = (lastDate / (60 * 60000) - lastDateJS.getTimezoneOffset() / 60) % 24 / 24;
+                        v = [1, 2, 3, 4, 5, 6, 0].indexOf(parseInt(lastDateJS.getDay())) + fd
+                        max = 7;
+                        break;
+
+                }
+
+                let p = calculate(v, max);
+
+                fill(255)
+
+                let m = 40;
+                let w = (width - 2 * m) / 3
+
+                let l = (w + m) * i
+                let r = l + w
+                let t = height - p.y1 * height;
+                let b = (p.y1 - p.y0) * height;
+
+                // let t = 0
+                // let b = height;
+
+                rect(l, t, w, b)
+            })
+
+        }
+
+        function setup() {
+
+            w = document.documentElement.clientWidth
+            w = w > 800 ? 800 : w
+            createCanvas(w, 400, document.getElementById("canvas"))
+            //background(255)
+
+            setupDOM();
+
+        }
+    </script>
 </body>
 
 </html>
