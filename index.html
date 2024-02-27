@@ -20,6 +20,10 @@
             color: white;
         }
 
+        body.debug {
+            background: #888;
+        }
+
         canvas {
             margin-top: 80px;
         }
@@ -71,6 +75,9 @@
         </div>
     </div>
     <script>
+
+        let _x;
+        let _y;
         
         let lastDate = Date.now();
         let lastDraw = Date.now();
@@ -128,6 +135,7 @@
             debugTime = Date.now() + debugTimeout;
         }
 
+        let debug = {}
 
         function draw() {
 
@@ -136,8 +144,10 @@
 
 
             if (debugTime !== null) {
+                document.querySelector("body").classList.add("debug")
                 document.getElementById("controls").style.display = 'block';
                 if (debugTime < Date.now()) {
+                    document.querySelector("body").classList.remove("debug")
                     document.getElementById("controls").style.display = 'none';
                     debugTime = null;
                 }
@@ -176,7 +186,10 @@
 
                 let p = calculate(v, max);
 
-                fill(255)
+               
+                
+
+               
 
                 let m = 40;
                 let w = (width - 2 * m) / 3
@@ -189,7 +202,34 @@
                 // let t = 0
                 // let b = height;
 
+                fill (0)
+                rect(l, 0, w, height)
+
+                fill(255)
+
                 rect(l, t, w, b)
+
+                if (debugTime) {
+
+                    if (!debug[period]) {
+                        debug[period] = createSpan(period)
+                        debug[period].position(_x + l + 5, _y + height + 5)
+                        //debug[period].position(100, 100)
+                        debug[period].style("font-family", "monospace");
+                        debug[period].style("font-size", "12px")
+                        
+                        debug[period].style("color", "white")
+                        // debug[period].parent(document.querySelector("canvas"))
+                    }
+
+                    debug[period].style("display", "block")
+                    debug[period].html (v.toFixed(1))
+                    
+                    // text("23", l + 10, height + 20)
+                    
+                } else {
+                    debug[period] && debug[period].style("display", "none")
+                }
             })
 
         }
@@ -202,6 +242,11 @@
             createCanvas(w, h, document.getElementById("canvas"))
             //background(255)
 
+            let r = document.getElementsByTagName("canvas")[0].getBoundingClientRect();
+            _x = r.x
+            _y = r.y
+
+            console.log(r)
             setupDOM();
 
         }
