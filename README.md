@@ -1,3 +1,9 @@
+#### install
+
+```
+sudo apt install xorg
+```
+
 #### /etc/default/grub
 
 ```
