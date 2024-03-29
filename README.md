@@ -205,3 +205,18 @@ sudo apt-get purge cloud-init
 sudo rm -rf /etc/cloud/ && sudo rm -rf /var/lib/cloud/
 ```
 
+#### Remote debugging chrome
+
+```
+ --remote-debugging-port=9222
+```
+
+```
+ssh -L 0.0.0.0:9223:localhost:9222 localhost -N
+```
+
+in browser op lokale machine:
+
+```
+chrome://inspect/#devices
+```
