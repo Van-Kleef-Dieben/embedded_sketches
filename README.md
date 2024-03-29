@@ -4,6 +4,12 @@
 sudo apt install xorg
 ```
 
+sound:
+
+```
+sudo apt install pulseaudio
+```
+
 #### /etc/default/grub
 
 ```
