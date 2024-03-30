@@ -239,6 +239,10 @@ chrome://inspect/#devices
 ```
 sudo apt-get install mosquitto
 sudo apt-get install mosquitto-clients
+
+chmod 755 /var/run/mosquitto/mosquitto.run
+chmod 755 /var/log/mosquitto/mosquitto.log
+
 ```
 
 /etc/mosquitto/mosquitto.conf
