@@ -49,8 +49,8 @@ let sketch = (p) =>
     }
 
 
-    let sm_a = new StateMachine(settings);
-    let sm_b = new StateMachine(settings);
+    let sm_a; //= new StateMachine(settings);
+    let sm_b; // = new StateMachine(settings);
 
     function updateWord() {
 
@@ -170,7 +170,8 @@ let sketch = (p) =>
             sm_a_word = p.random(words)
         }
 
-        if (one.is('angry')) {
+        /*
+	 * if (one.is('angry')) {
 
         }
 
@@ -198,6 +199,7 @@ let sketch = (p) =>
         if (other.state == "hurt" && p.random() > 0.9) {
             one.neutral();
         }
+	*/
 
     }
 
@@ -394,6 +396,7 @@ let sketch = (p) =>
         osc.connect(filter)
         osc.start()
 
+
     }
 
     p.mousePressed = (event) => {
@@ -402,7 +405,6 @@ let sketch = (p) =>
         }
     }
 }
-
 
 
 new p5(sketch, document.querySelector("body")[0])
