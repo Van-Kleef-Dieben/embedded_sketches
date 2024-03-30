@@ -69,6 +69,10 @@ DISPLAY=:0.0 /usr/bin/chromium-browser file:///home/wubmans/test2.html --kiosk -
 DISPLAY=:0.1 /usr/bin/chromium-browser file:///home/wubmans/test1.html --kiosk --user-data-dir="/home/wubmans/cb0"
 ```
 
+```
+DISPLAY=:0.0 /usr/bin/chromium-browser file:///home/wubmans/bickering.html --window-size=1680,1050 --kiosk --remote-debugging-port=9222 -allow-file-access-from-files --user-data-dir=remote-profile --autoplay-policy=no-user-gesture-required
+```
+
 #### .bash_profile / .profile
 
 ```
