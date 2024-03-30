@@ -3,6 +3,7 @@
 ```
 sudo apt install xorg
 sudo apt install unclutter
+sudo apt install chromium-browser
 ```
 
 sound:
