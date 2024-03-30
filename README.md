@@ -232,3 +232,19 @@ in browser op lokale machine:
 ```
 chrome://inspect/#devices
 ```
+
+
+#### MQTT
+
+```
+sudo apt-get install mosquitto
+sudo apt-get install mosquitto-clients
+```
+
+/etc/mosquitto/mosquitto.conf
+
+```
+port 1883
+listener 9001
+protocol websockets
+```
