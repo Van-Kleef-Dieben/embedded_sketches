@@ -2,6 +2,7 @@
 
 ```
 sudo apt install xorg
+sudo apt install unclutter
 ```
 
 sound:
