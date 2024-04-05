@@ -12,6 +12,12 @@ sound:
 sudo apt install pulseaudio
 ```
 
+```
+$ amixer sset Master unmute
+$ amixer sset Speaker unmute
+$ amixer sset Headphone unmute
+```
+
 #### /etc/default/grub
 
 ```
