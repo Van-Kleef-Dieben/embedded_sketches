@@ -142,6 +142,54 @@ Section "Screen"
 EndSection
 ```
 
+#### /etc/X11/xorg.conf.d/10-monitor.conf | Xinerama
+
+Section "ServerLayout"
+        Identifier "Layout"
+        Screen "Screen0" 0 0
+        Screen "Screen1" RightOf "Screen0"
+        Option "Xinerama"
+EndSection
+
+Section "Monitor"
+   Identifier   "Monitor0"
+   VendorName   "Monitor Vendor"
+   ModelName    "Monitor Model"
+EndSection
+
+Section "Monitor"
+   Identifier   "Monitor1"
+   VendorName   "Monitor Vendor"
+   ModelName    "Monitor Model"
+EndSection
+
+Section "Device"
+        Identifier "Device0"
+        Driver "radeon"
+        BusID "PCI:1:0:0"
+        Screen 0
+EndSection
+
+Section "Device"
+        Identifier "Device1"
+        Driver "radeon"
+        BusID "PCI:1:0:0"
+        Screen 1
+EndSection
+
+Section "Screen"
+        Identifier "Screen0"
+        Device "Device0"
+        Monitor "Monitor0"
+EndSection
+
+Section "Screen"
+        Identifier "Screen1"
+        Device "Device1"
+        Monitor "Monitor1"
+EndSection
+
+
 ##### setup autologin so it acts as a kiosk
 ```
 mkdir /etc/systemd/system/getty@tty1.service.d/
