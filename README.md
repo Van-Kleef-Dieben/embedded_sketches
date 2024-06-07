@@ -171,14 +171,14 @@ EndSection
 
 Section "Device"
         Identifier "Device0"
-        Driver "radeon"
+        Driver "amdgpu"
         BusID "PCI:1:0:0"
         Screen 0
 EndSection
 
 Section "Device"
         Identifier "Device1"
-        Driver "radeon"
+        Driver "amdgpu"
         BusID "PCI:1:0:0"
         Screen 1
 EndSection
