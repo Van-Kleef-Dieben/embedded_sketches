@@ -6,6 +6,12 @@ sudo apt install unclutter
 sudo apt install chromium-browser
 ```
 
+handig:
+
+```
+sudo apt install plocate
+sudo apt install xdotool
+
 sound:
 
 ```
