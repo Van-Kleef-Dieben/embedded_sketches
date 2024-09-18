@@ -26,18 +26,19 @@ $ amixer sset Headphone unmute
 
 #### /etc/default/grub
 
-```
 \# If you change this file, run 'update-grub' afterwards to update
 \# /boot/grub/grub.cfg.
 \# For full documentation of the options in this file, see:
 \#   info -f grub -n 'Simple configuration'
 
+```
 GRUB_DEFAULT=0
 GRUB_TIMEOUT_STYLE=hidden
 GRUB_TIMEOUT=0
 GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash vga=current fbcon=nodefer vt.cur_default=1 i915.fastboot=1"
 GRUB_CMDLINE_LINUX="quiet"
+```
 
 \# Uncomment to enable BadRAM filtering, modify to suit your needs
 \# This works with Linux (no patch required) and with any kernel that obtains
