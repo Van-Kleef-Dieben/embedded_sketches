@@ -194,6 +194,10 @@ Section "Screen"
         Identifier "Screen1"
         Device "Device1"
         Monitor "Monitor1"
+        SubSection "Display"
+                Depth 24
+                Modes "1680x1050"
+        EndSubSection
 EndSection
 
 
